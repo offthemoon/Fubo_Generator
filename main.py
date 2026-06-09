@@ -4,17 +4,11 @@
 
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QTextEdit, QComboBox
-
 from PyQt6.QtWidgets import *
-
-
 #We are going to need to have this to validate.
 from PyQt6.QtGui import QIntValidator
 
-
 import os
-
-
 import json
 
 email_path = 'emails.txt'
@@ -26,12 +20,37 @@ def warning(users_emails):
     if True:
         get_emails(users_emails)
 
+
+#used for credit card. 
+def LoadProfiles():
+
+    #Only if the name exist. 
+    if os.path.exists(credit_card_path):
+        information = {}
+        with open(credit_card_path,"r") as file:
+            information = json.load(file)
+    else:
+        return
+    
+    #Now that if we have this information we are going to want to display it....
+
+    
+    LineEdit_First_name.setText(information["first_name"])
+    LinEdit_Last_name.setText(information["last_name"])
+    LineEdit_credit_card.setText(information["credit_number"])
+    LineEdit_CVV.setText(information['cvv'])
+    Combo_Month.setCurrentText(information['exp_month'])
+    Combo_Year.setCurrentText(information['exp_year'])
+    LineEdit_ZipCode.setText(information['zipcode'])
+
+
+
+
+
 def save_credit_card():
 
     #Do not care about if they already exist we are just going to want to write to it. (Want to write to it as json tho.)
-
     #Stored all the information in a proper json format. 
-
 
     credit_card = {
         "first_name" : LineEdit_First_name.text(),
@@ -220,6 +239,7 @@ LineEdit_ZipCode.setValidator(QIntValidator())
 
 
 Combo_Month = QComboBox()
+
 Combo_Month.addItems([
    "1",
     "2",
@@ -233,7 +253,6 @@ Combo_Month.addItems([
     "10",
     "11",
     "12"
-
 
 ])
 
@@ -254,6 +273,7 @@ Combo_Year.addItems([
 button_credit_card = QPushButton("Save Profile")
 
 
+LoadProfiles()
 
 layout.addRow("First Name: ", LineEdit_First_name)
 layout.addRow("Last Name: ", LinEdit_Last_name)
@@ -267,8 +287,7 @@ layout.addRow(button_credit_card)
 button_credit_card.clicked.connect(save_credit_card)
 
 
-#First and Last Name information
-
+#Populate the information with stuff already there if it exist. 
 
 
 #We actually now have to add the widgets we created into the layout we also created.
