@@ -11,8 +11,30 @@ from PyQt6.QtGui import QIntValidator
 import os
 import json
 
-email_path = 'emails.txt'
+
+#Used for passwords. 
+
+import secrets
+import string
+
+
+email_path = 'emails.json'
 credit_card_path = 'credit_card.json'
+
+
+#Used to get only the emails and send them back. 
+def decompileInformation():
+    print('We are decompiling information.')
+    text = ''
+    for email in json_info:
+        text = text + email['email'] + '\n'
+
+    return text
+    # for email in 
+
+    
+    
+
 
 
 def warning(users_emails):
@@ -107,22 +129,53 @@ def get_emails(users_emails):
         if len(text) == 0:
             valid_list = True
 
-    
+    #Return if list is not valid. 
+    if valid_list == False:
+        print('List is not valid. ')
+        return
+
+    #Want to go through the list again and make them each a json and add it to a list. 
+
+
+    list_of_emails = []
+
+    #Used to generate passwords.
+    alphabet = string.ascii_letters + string.digits + "!@#$%^"
+
+
+
+    #For each emmail going to want to do this. 
+    for email in list_split:
+
+        #Each email generate a new unique password. With a range of 12. 
+        generated_password = ''.join(secrets.choice(alphabet) for _ in range(12))
+
+        current_email = {
+            "email" : email,
+            "has_been_used" : False,
+            "password" : generated_password
+        }
+
+        #Going to want to add it to our list. 
+        list_of_emails.append(current_email)
+
+
+
+
     #We now have a valid list and can properly store it.
 
     print(valid_list)
     if valid_list == True:
         print("Saved Information! ")
 
-        path = 'emails.txt'
-
         #If the path already exist in our file.
-        if os.path.exists(path):
-            with open(path,"w") as file:
-                file.write(text)
+        if os.path.exists(email_path):
+            with open(email_path,"w") as file:
+                json.dump(list_of_emails,file,indent=2)
+                #file.write(text)
         else:
-            with open(path,"w") as file:
-                file.write(text)
+            with open(email_path,"w") as file:
+                json.dump(list_of_emails,file,indent=2)
         
 
 
@@ -163,17 +216,20 @@ window.setCentralWidget(tabs)
 #Now we are going to want to allow a user to enter a bunch of emails -> and passwords. 
 #This is going to return a string. We are from this string going to want to parse it and sepearte each.
 
-path = 'emails.txt'
+
 #If the path already exist in our file we are going to want to display the emails already into the information. 
-if os.path.exists(path):
-    with open(path,"r") as file:
-        information = file.read()
+
+json_info = {}
+
+if os.path.exists(email_path):
+    with open(email_path,"r") as file:
+        json_info = json.load(file)
 else:
-    with open(path,"r") as file:
-        information = "Enter Emails, Make Sure each email is seperate by a : "
+    with open(email_path,"w") as file:
+        json_info = "Enter Emails, Make Sure each email is seperate by a : "
 
 
-print("This is the information \n" , information)
+print("This is the information \n" , json_info)
 
 
 
@@ -181,7 +237,10 @@ print("This is the information \n" , information)
 textBox_emails = QTextEdit(emails)
 textBox_emails.setPlaceholderText("Please Add Emails. ")
 #Want to sent the information of textBox_emails to the information we got from the path. -> everytime we view it the list will be displayed. 
-textBox_emails.setPlainText(information)
+
+corrected_list = decompileInformation()
+
+textBox_emails.setPlainText(corrected_list)
 textBox_emails.move(150,150)
 textBox_emails.setFixedSize(350,350)
 
