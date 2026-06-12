@@ -17,6 +17,8 @@ import json
 import secrets
 import string
 
+import generate
+
 
 email_path = 'emails.json'
 credit_card_path = 'credit_card.json'
@@ -199,6 +201,16 @@ layout = QFormLayout()
 
 credit_card.setLayout(layout)
 
+#-------------------------------------------------------- Setting the MAIN (Start Task) -------------------------------------------------------
+
+start_task_button = QPushButton('Generate an account',main)
+
+
+start_task_button.clicked.connect(generate.fubo_action)
+
+
+
+
 
 #-------------------------------------------------------- Setting the TABS -------------------------------------------------------
 tabs.addTab(main, "Main Menu")
@@ -274,10 +286,11 @@ LinEdit_Last_name.setMaxLength(20)
 
 #Credit Card Information. 
 LineEdit_credit_card = QLineEdit(credit_card)
-LineEdit_credit_card.setMaxLength(16)
+LineEdit_credit_card.setMaxLength(20)
 LineEdit_credit_card.setPlaceholderText("1234-5678-9999-9999")
 
-LineEdit_credit_card.setValidator(QIntValidator())
+#do not allow the below code, includes a bug / error that doesn't allow us to enter 16 digits and instead only 10. Need another way to verify. 
+#LineEdit_credit_card.setValidator(QIntValidator())
 
 #CVV Time
 LineEdit_CVV = QLineEdit()
@@ -344,22 +357,6 @@ layout.addRow("ZipCode: ",  LineEdit_ZipCode)
 layout.addRow(button_credit_card)
 
 button_credit_card.clicked.connect(save_credit_card)
-
-
-#Populate the information with stuff already there if it exist. 
-
-
-#We actually now have to add the widgets we created into the layout we also created.
-# Steps Create Widget -> Then create layout. 
-# Connect the layout to the widget
-#
-
-# layout.addWidget(LineEdit_credit_card)
-# layout.addWidget(LineEdit_credit_card)
-# layout.addWidget(textBox_Month)
-
-
-
 
 
 window.show()
