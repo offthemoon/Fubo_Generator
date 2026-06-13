@@ -1,3 +1,10 @@
+Purpose? 
+
+Purpose: as a college student I could not afford paying $80 a month to watch football / basketball.... so I had to create many trials using fubo.
+This application I created help solves the problem and simplifies my method. This is strictly for demonstration / resume purpose.
+If anyone uses this ensure you follow FUBO's ToS. 
+
+
 How does this work? 
 
 First you are going to place a list of emails you have (You can get alot of emails various ways like icloud or yahoo spam emails)
