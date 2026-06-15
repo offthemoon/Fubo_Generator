@@ -10,7 +10,7 @@ from PyQt6.QtGui import QIntValidator
 
 import os
 import json
-
+import requests
 
 #Used for passwords. 
 
@@ -22,6 +22,7 @@ import generate
 
 email_path = 'emails.json'
 credit_card_path = 'credit_card.json'
+discord_path = 'discord.json'
 
 
 #Used to get only the emails and send them back. 
@@ -34,7 +35,54 @@ def decompileInformation():
     return text
     # for email in 
 
+
+#Function used for whenever the user clicks on the discord webhook information and saves it. 
+def save_discord():
+
+    #Extract information we are going to want to send the discord webhook too.
+    line_edit_text = LineEdit_discord.text()
+    webhook_info = {
+        "webhook" : line_edit_text
+    }
+
+    #So we are going to want to open the file first to write too it. 
+    with open(discord_path, "w") as file:
+        json.dump(webhook_info,file)
+
     
+def test_webhook():
+
+    discord_info = {
+        "username" : "Fubo Generator",
+        "content" : ".",
+
+        "embeds" : [
+            {
+                "title" : "Hello , This is a Test for Fubo Generator! ",
+        
+                'fields' : [
+                    {
+                        "name" : "Test",
+                        "value" : "This is a test. "
+                    }
+
+
+                ]
+            }
+
+        ]
+    }
+
+    #Get the actual link for the discord. 
+    discord_link = LineEdit_discord.text()
+
+    status = requests.post(discord_link,json = discord_info)
+
+    if(status.status_code != 204):
+        print('Error has occured -> error is ', status, status.text)
+    else: 
+        print("We tested Succesfully! ")
+
     
 
 
@@ -357,6 +405,51 @@ layout.addRow("ZipCode: ",  LineEdit_ZipCode)
 layout.addRow(button_credit_card)
 
 button_credit_card.clicked.connect(save_credit_card)
+
+
+
+
+#-------------------------------------------------------WEBHOOK INFORMATION --------------------------------------------------------------------------------------------------------------
+
+#Going to add the discord webhook -> going to be used to send the information for whenever it is done generating.
+
+#Going to want to read if there is already a discord webhook document. 
+
+if os.path.exists(discord_path):
+    with open(discord_path, "r") as file:
+        discord_url = json.load(file)
+else:
+    discord_url = {
+        "webhook" : "N/A"
+    }
+
+
+#We are going to want to make a layout....
+#Create the line edit for the settings.
+layout_for_settings = QFormLayout()
+
+#We need this in order for the layout and the widget page to match / link to each other. 
+settings.setLayout(layout_for_settings)
+
+LineEdit_discord = QLineEdit()
+#Now going to want to fill it in with information. 
+LineEdit_discord.setText(discord_url['webhook'])
+
+
+button_discord = QPushButton("Save Discord URL")
+button_discord.clicked.connect(save_discord)
+
+button_test_webhook = QPushButton("Test Webhook!")
+button_test_webhook.clicked.connect(test_webhook)
+
+
+layout_for_settings.addWidget(LineEdit_discord)
+layout_for_settings.addWidget(button_discord)
+layout_for_settings.addWidget(button_test_webhook)
+
+
+
+
 
 
 window.show()
