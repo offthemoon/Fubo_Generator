@@ -7,6 +7,7 @@ import playwright
 import os
 import json
 
+
 from playwright.sync_api import sync_playwright
 
 #URL used to sign up. 
@@ -14,6 +15,7 @@ main_url = 'https://www.fubo.tv/signup'
 
 account_path = 'emails.json'
 credit_path = 'credit_card.json'
+discord_path = 'discord.json'
 
 
 def fubo_action():
@@ -287,6 +289,10 @@ def fubo_action():
 
             #Now update the profile. -> showing that we succesuffly signed up. 
             update_account(user_name)
+
+            #Now we are going to want to send webhook to notify that we have offically completed the task. 
+            send_webhook(user_name,password,days_text)
+            
         
         except:
             print('Error and we did not succesfully sign up')
@@ -294,6 +300,63 @@ def fubo_action():
         new_page.pause()
 
         #From this page we are going to want to wait for some dumb sh.
+
+def send_webhook(user_name, pw, length_until_expire = "?"):
+
+    #Now we need to get the users discord. 
+    if os.path.exists(discord_path):
+        with open (discord_path, 'r') as file:
+            discord_info = json.load(file)
+    else:
+        print('Error, no file exist for the discord webhook, please save one.')
+        return
+
+    #Now that we got the webhook we are going to want to send it. 
+
+    discord_url = discord_info['webhook']
+
+    #Build the webhook before we send it. 
+    webhook = {
+
+        "username" : "FuboBot",
+
+        'embeds' : [
+            {
+                'title' : "Succesfully Generated!🥳",
+                
+                "fields" : [
+                    {
+                        "name" : 'Email Associated',
+                        "value" : user_name
+                    },
+                    {
+                        'name' : 'Password',
+                        'value' : f"||{pw}||"
+                        
+                    },
+                    {
+                        'name' : 'length of trial',
+                        'value' : length_until_expire
+                    }
+
+                ]
+                
+            }               
+        ]
+
+    }
+
+
+    #Now we are going to want to send the request. 
+    request_info = requests.post(discord_url,json = webhook)
+
+    if request_info.status_code != 204:
+        print('Error sending discord webhook, please make sure correct discord webhook is saved. ')
+    else:
+        print('Succesfully sent the discord webhook. ')
+
+    
+
 
 def get_account():
 
