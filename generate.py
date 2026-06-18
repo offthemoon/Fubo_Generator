@@ -268,13 +268,13 @@ def fubo_action():
         # " font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 1.5; " \
         # "text-rendering: auto; text-shadow: none; text-transform: none; visibility: visible;">
 
-        credit_frame.get_by_label("CVV").fill(cvv_number)
+        credit_frame.get_by_label("CVV").type(cvv_number)
      
         # new_page.locator("iframe[name=\"recurly-element--xL4bpV34Qgahg2h0\"]").content_frame.get_by_role("textbox", name="___ ___ ___ ___").fill(cc_number)
 
         # new_page.locator("iframe[name=\"recurly-element--xL4bpV34Qgahg2h0\"]").content_frame.get_by_role("textbox", name="MM / YY").fill(exp_month)
 
-        new_page.get_by_test_id("cc-zip-fld").fill(zipcode)
+        new_page.get_by_test_id("cc-zip-fld").type(zipcode)
 
         #This is going to be the last we select.....
         #new_page.pause()
@@ -339,11 +339,9 @@ def send_webhook(user_name, pw, length_until_expire = "?"):
                         'value' : length_until_expire
                     }
 
-                ]
-                
+                ]       
             }               
         ]
-
     }
 
 
