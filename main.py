@@ -283,7 +283,15 @@ json_info = {}
 
 if os.path.exists(email_path):
     with open(email_path,"r") as file:
-        json_info = json.load(file)
+        #going to want to verify that the file is not empty before reading it with json info...
+
+        read_from_file = file.read().strip()
+
+        if read_from_file:
+            json_info = json.load(file)
+        else:
+            json_info = {} 
+        # json_info = json.load(file)
 else:
     with open(email_path,"w") as file:
         json_info = "Enter Emails, Make Sure each email is seperate by a : "
