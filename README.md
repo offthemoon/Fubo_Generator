@@ -28,5 +28,7 @@ Keep on doing this and repeat and never have to pay again!
 
 This is for education and demonstration purpose! Make sure everything you do stays in TOS of FUBO and does not violate anything. 
 
+GOING TO POSSIBLY UPDATE THIS ALL USING ELECTRON + REACT + TS VERY SOON. 
+
 
 
