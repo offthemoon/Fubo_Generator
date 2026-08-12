@@ -3,3 +3,5 @@
 *.txt
 chromeInformation/
 __pycache__/
+*.db
+*.DB
